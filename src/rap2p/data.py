@@ -200,8 +200,9 @@ def infer_ordinal(question: str, options: list[str]) -> bool:
 
 def load_domain(repo: str | Path, domain: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     repo = Path(repo)
-    qa_path = repo / "Dataset_all" / "q&a" / f"issp_qa_{domain}.json"
-    answer_path = repo / "Dataset_all" / "A_GroundTruth_sampling500" / f"issp_answer_{domain}.json"
+    slug = domain.lower().replace(" ", "")
+    qa_path = repo / "Dataset_all" / "q&a" / f"issp_qa_{slug}.json"
+    answer_path = repo / "Dataset_all" / "A_GroundTruth_sampling500" / f"issp_answer_{slug}.json"
     if not qa_path.exists() or not answer_path.exists():
         raise FileNotFoundError(f"Missing official SocioBench files for {domain}: {qa_path}, {answer_path}")
     return json.loads(qa_path.read_text(encoding="utf-8")), json.loads(answer_path.read_text(encoding="utf-8"))
