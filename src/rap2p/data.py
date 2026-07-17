@@ -539,13 +539,25 @@ def validate_item_holdout_leakage(frame: pd.DataFrame, orders: pd.DataFrame) -> 
     """Confirm unseen items never appear inside any calibration-order sequence
     (i.e. can never be drawn as K-shot history for any respondent, train or
     test) -- the guard the OOD-Item axis depends on.
+
+    ``question_id`` is only unique within a domain (ISSP reuses ``v1``, ``v2``
+    ... across domains), so the check must be domain-scoped: a panel's
+    calibration order only contains that panel's own domain items, and we only
+    flag matches against unseen items *in the same domain*.
     """
-    unseen_keys = set(frame.loc[frame["is_unseen_item"], "question_id"].astype(str))
+    unseen_by_domain: dict[str, set[str]] = {}
+    for domain, group in frame[frame["is_unseen_item"]].groupby("domain"):
+        unseen_by_domain[domain] = set(group["question_id"].astype(str))
+    panel_to_domain = frame.drop_duplicates("panel_id").set_index("panel_id")["domain"].to_dict()
+
+    total_unseen = sum(len(s) for s in unseen_by_domain.values())
     offenders = 0
     for row in orders.itertuples(index=False):
+        domain = panel_to_domain.get(row.panel_id)
+        unseen = unseen_by_domain.get(domain, set())
         ordered = set(json.loads(row.ordered_question_ids_json))
-        offenders += len(ordered & unseen_keys)
-    report = {"unseen_items": len(unseen_keys), "unseen_items_found_in_calibration_orders": offenders}
+        offenders += len(ordered & unseen)
+    report = {"unseen_items": total_unseen, "unseen_items_found_in_calibration_orders": offenders}
     if offenders:
         raise AssertionError(f"Item-holdout leakage detected: {report}")
     return report
