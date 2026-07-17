@@ -64,7 +64,7 @@ training:
   effective_batch: 64
   micro_batch: 4
   gradient_accumulation: 16
-  gradient_checkpointing: true
+  gradient_checkpointing: false             # disabled: 8.4GB→~13GB VRAM on 24GB 4090, ~1.5x speedup (no forward recompute in backward)
   ordinal_loss_weight: 0.1
   balance_loss_weight: 0.01                          # only engaged if router-collapse guard trips
   router_collapse_threshold: 0.85                     # trip balance loss if any block's mean gate share exceeds this
