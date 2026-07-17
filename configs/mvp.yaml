@@ -17,14 +17,14 @@ paths:
 
 data:
   domains: [Environment, Role of Government]
-  countries_per_domain: 4                         # frozen before looking at any model result
+  countries_per_domain: 999                       # use all countries in the 500-sample (each has ~17-18 respondents; keeping only 4 wastes 92% of data)
   max_respondents_per_country: 3000
   min_answered_items_per_respondent: 12
   max_items_per_domain: 20                        # top-coverage ordinal items kept per domain
   unseen_item_fraction: 0.15                       # OOD-Item held-out fraction, per domain
   intersection_attributes: [age_bin, education, income_quintile, urbanicity]
   intersection_holdout_fraction: 0.15              # fraction of valid intersection cells held out entirely
-  min_cell_size: 40                                # minimum respondents per intersection cell to be usable
+  min_cell_size: 5                                 # lowered from 40: 500-sample has ~17/country, so intersection cells are small
   respondent_split: [0.70, 0.10, 0.20]             # train / validation / test, stratified by domain/country/sex/age_bin
   k_values: [0, 1, 3, 5, 8]
   calibration_seed: 1701                           # primary K-history sampling seed
