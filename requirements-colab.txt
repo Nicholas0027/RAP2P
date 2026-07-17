@@ -1,0 +1,2 @@
+# Keep the PyTorch/CUDA build supplied by the server or Colab runtime.
+-e .[llm,api]

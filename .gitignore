@@ -1,0 +1,16 @@
+artifacts/
+external/
+*.egg-info/
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+# secrets — never commit API keys, PATs, or credentials
+.env
+*.env
+.env.*
+secrets/
+*.key
+*.pem
+.git-credentials
