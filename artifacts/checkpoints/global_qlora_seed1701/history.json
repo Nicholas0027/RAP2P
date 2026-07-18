@@ -1,0 +1,12 @@
+[
+  {
+    "step": 200,
+    "elapsed_minutes": 44.7038892804645,
+    "lr": 0.0001965692587766216,
+    "router_collapse_engaged": false,
+    "choice": 1.4262372919172048,
+    "ordinal": 0.3715261514298618,
+    "balance": 0.0,
+    "validation_nll": 1.5966099560260774
+  }
+]
