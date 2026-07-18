@@ -1,0 +1,16 @@
+% binhex.tex -- minimal stand-in providing \hexnumber@ (single hex digit,
+% 0-15) for newtxtext/newtxmath. The real binhex.tex is absent from this
+% minimal TeX Live install. \makeatletter is needed because this TeX Live's
+% package loader does not set @ to a letter when \input-ing inside newtxtext.sty.
+\makeatletter
+\def\hexnumber@#1{\ifcase#1%
+  0\or 1\or 2\or 3\or 4\or 5\or 6\or 7\or 8\or 9%
+  \or A\or B\or C\or D\or E\or F\fi}
+\endinput
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{figures/a-clean-flat-publication-ready-vector-1784339473499.png}
+  \caption{A clean, flat, publication-ready vector schematic diagram for a machine-learning research paper, drawn left-to-right on a pure white background (\#FFFFFF), in t}
+  \label{fig:a-clean-flat-publication-ready-vector-1784339473499}
+\end{figure}
