@@ -28,7 +28,20 @@ class DynamicRankBlockLoRALinear(nn.Module):
         self.base = base
         for parameter in self.base.parameters():
             parameter.requires_grad = False
-        out_features, in_features = base.weight.shape
+        # A bitsandbytes Linear4bit stores its weight PACKED as a flat
+        # (in*out/2, 1) uint8 buffer, so base.weight.shape is NOT (out, in).
+        # Prefer the module's declared in_features/out_features (exposed by
+        # both nn.Linear and Linear4bit); fall back to the dequantized
+        # quant_state.shape, and only last to weight.shape for plain modules.
+        in_features = getattr(base, "in_features", None)
+        out_features = getattr(base, "out_features", None)
+        if in_features is None or out_features is None:
+            quant_state = getattr(base.weight, "quant_state", None)
+            true_shape = getattr(quant_state, "shape", None)
+            if true_shape is not None and len(true_shape) == 2:
+                out_features, in_features = int(true_shape[0]), int(true_shape[1])
+            else:
+                out_features, in_features = base.weight.shape
         self.in_features = int(in_features)
         self.out_features = int(out_features)
         self.rank_blocks = int(rank_blocks)
