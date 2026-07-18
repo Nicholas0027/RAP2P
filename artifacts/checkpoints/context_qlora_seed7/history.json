@@ -1,0 +1,92 @@
+[
+  {
+    "step": 200,
+    "elapsed_minutes": 54.40297572429602,
+    "lr": 0.0001965692587766216,
+    "router_collapse_engaged": false,
+    "choice": 1.4170717443712055,
+    "ordinal": 0.36884091393090784,
+    "balance": 0.0,
+    "validation_nll": 1.5006724357604981
+  },
+  {
+    "step": 400,
+    "elapsed_minutes": 108.80647329695057,
+    "lr": 0.00018123879078162097,
+    "router_collapse_engaged": false,
+    "choice": 1.3328649785928428,
+    "ordinal": 0.3547805705061182,
+    "balance": 0.0,
+    "validation_nll": 1.4722463995218278
+  },
+  {
+    "step": 600,
+    "elapsed_minutes": 163.1576186961339,
+    "lr": 0.000155500908021347,
+    "router_collapse_engaged": false,
+    "choice": 1.3076812564954161,
+    "ordinal": 0.3502078870916739,
+    "balance": 0.0,
+    "validation_nll": 1.4407521933317184
+  },
+  {
+    "step": 800,
+    "elapsed_minutes": 217.49876968342966,
+    "lr": 0.00012265286318123415,
+    "router_collapse_engaged": false,
+    "choice": 1.268874951712787,
+    "ordinal": 0.34007898399606346,
+    "balance": 0.0,
+    "validation_nll": 1.470777216553688
+  },
+  {
+    "step": 1000,
+    "elapsed_minutes": 271.9468235654291,
+    "lr": 8.690278422072384e-05,
+    "router_collapse_engaged": false,
+    "choice": 1.21566441539675,
+    "ordinal": 0.3295204782159999,
+    "balance": 0.0,
+    "validation_nll": 1.5157664835453033
+  },
+  {
+    "step": 1200,
+    "elapsed_minutes": 326.8187455952633,
+    "lr": 5.283057559252341e-05,
+    "router_collapse_engaged": false,
+    "choice": 1.1517420312017201,
+    "ordinal": 0.31387500717304645,
+    "balance": 0.0,
+    "validation_nll": 1.557326278090477
+  },
+  {
+    "step": 1400,
+    "elapsed_minutes": 382.9896723622999,
+    "lr": 2.480119157218108e-05,
+    "router_collapse_engaged": false,
+    "choice": 1.0964105143677443,
+    "ordinal": 0.29814114229753613,
+    "balance": 0.0,
+    "validation_nll": 1.5935626298189163
+  },
+  {
+    "step": 1600,
+    "elapsed_minutes": 438.90797978461876,
+    "lr": 6.405446625399481e-06,
+    "router_collapse_engaged": false,
+    "choice": 1.0487025731429458,
+    "ordinal": 0.28544916436541823,
+    "balance": 0.0,
+    "validation_nll": 1.6662735223770142
+  },
+  {
+    "step": 1800,
+    "elapsed_minutes": 34.985620022169314,
+    "lr": 0.0,
+    "router_collapse_engaged": false,
+    "choice": 1.0290372317446577,
+    "ordinal": 0.2806716989725828,
+    "balance": 0.0,
+    "validation_nll": 1.6852011561393738
+  }
+]
