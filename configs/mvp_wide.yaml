@@ -1,0 +1,137 @@
+# RAP2P MVP configuration.
+# Single source of truth for the AAAI-window (12-day) compute-bounded plan.
+# All paths are resolved relative to the project root at load time (see src/rap2p/config.py).
+
+seed: 1701
+
+paths:
+  sociobench_repo: external/SocioBench          # clone of https://github.com/JiaWANG-TJ/SocioBench
+  raw: artifacts/raw
+  processed: artifacts/processed                 # leakage-safe respondent/item rows + split assignment
+  embeddings: artifacts/embeddings                # cached demographic/item/answer-pair embeddings
+  item_graph: artifacts/item_graph                # cached shrinkage item-item correlation matrix
+  checkpoints: artifacts_wide/checkpoints
+  predictions: artifacts_wide/predictions
+  metrics: artifacts_wide/metrics
+  figures: artifacts_wide/figures
+
+data:
+  domains: [Environment, Role of Government]
+  countries_per_domain: 999                       # use all countries in the 500-sample (each has ~17-18 respondents; keeping only 4 wastes 92% of data)
+  max_respondents_per_country: 3000
+  min_answered_items_per_respondent: 12
+  max_items_per_domain: 20                        # top-coverage ordinal items kept per domain
+  unseen_item_fraction: 0.15                       # OOD-Item held-out fraction, per domain
+  intersection_attributes: [age_bin, education, income_quintile, urbanicity]
+  intersection_holdout_fraction: 0.15              # fraction of valid intersection cells held out entirely
+  min_cell_size: 5                                 # lowered from 40: 500-sample has ~17/country, so intersection cells are small
+  respondent_split: [0.70, 0.10, 0.20]             # train / validation / test, stratified by domain/country/sex/age_bin
+  k_values: [0, 1, 3, 5, 8]
+  calibration_seed: 1701                           # primary K-history sampling seed
+  calibration_seeds_secondary: [7, 42]             # inference-only sensitivity checks, not used for main table
+  history_pair_dropout: 0.10
+  enable_modality_dropout: false   # wide run: remove the rap2p-only handicap for a fair comparison
+  modality_dropout:                                # keys must match ModalityDropout's fields (batching.py)
+    demographics: 0.20
+    history: 0.20
+    correlation: 0.15
+  correlation_shrinkage_lambda: 50
+  correlation_min_n_jk: 20                         # item pairs with fewer co-respondents get C_jk = 0
+  matched_pair:
+    max_attribute_distance: 1                      # demographics "almost identical" tolerance (binned attributes)
+    min_answer_divergence: 0.35                     # normalized ordinal distance threshold on the pair's selection items
+    selection_items: 5                               # K lowest-hash commonly-answered items used to measure known-answer divergence (excluded from target comparison)
+    min_shared_history_items: 3                      # minimum selection items answered by BOTH respondents
+    min_shared_targets: 3                            # minimum shared held-out target items per pair
+
+model:
+  backbone: meta-llama/Llama-3.1-8B-Instruct
+  smoke_backbone: hf-internal-testing/tiny-random-LlamaForCausalLM  # same architecture family (.model.layers, self_attn.q_proj/v_proj) as the real backbone; CPU/no-GPU plumbing check only, never reported as a result
+  dtype: bfloat16
+  quantization: nf4
+  max_length: 256
+  target_modules: [q_proj, v_proj]
+  target_last_n_layers: 16
+  population_rank: 128
+  alpha: 32
+  rank_blocks: 16                                    # R = rank_blocks * block_rank
+  block_rank: 8
+  router_hidden: 256
+  max_answer_options: 10                             # widest Likert/option scale supported (A..J); also sizes the answer-position embedding table
+  dropout: 0.05
+  embedding_model: Alibaba-NLP/gte-large-en-v1.5
+
+training:
+  effective_batch: 64
+  micro_batch: 4
+  gradient_accumulation: 16
+  gradient_checkpointing: true              # required: without it, 8B NF4 activations (QKV+attn+MLP) hit 23.5GB OOM on 24GB 4090
+  ordinal_loss_weight: 0.1
+  balance_loss_weight: 0.01                          # only engaged if router-collapse guard trips
+  router_collapse_threshold: 0.85                     # trip balance loss if any block's mean gate share exceeds this
+  optimizer: adamw
+  weight_decay: 0.01
+  warmup_fraction: 0.03
+  grad_clip: 1.0
+  validation_every: 200
+  stop_margin_minutes: 20
+
+runs:
+  global_qlora:
+    steps: [600, 800]
+    lr: 2.0e-4
+    seeds: [1701, 7]                                  # widened from 1 seed given compute slack (see README)
+    time_budget_minutes: 240
+  context_qlora:
+    steps: [600, 800]
+    lr: 2.0e-4
+    seeds: [1701, 7]
+    time_budget_minutes: 240
+  # Every rank-block-basis run (p2p_static + all rap2p variants) must use the
+  # SAME lora_lr and the same init_basis_from, or the ablation/control
+  # comparisons confound the ablated mechanism with a 25x basis-LR mismatch
+  # or a different starting point.
+  p2p_static:
+    steps: [500, 800]
+    lr: 5.0e-4
+    lora_lr: 2.0e-5
+    init_basis_from: global_qlora                       # Stage-1 warm start (see workflows.initialize_basis_from_peft_checkpoint)
+    seeds: [1701, 7]
+    time_budget_minutes: 240
+  rap2p:
+    steps: [500, 800]
+    lr: 5.0e-4
+    lora_lr: 2.0e-5                                     # small fine-tune of the shared basis during Stage 2
+    init_basis_from: global_qlora
+    seeds: [1701, 7, 42]
+    time_budget_minutes: 240
+  rap2p_no_graph:
+    steps: [500, 800]
+    lr: 5.0e-4
+    lora_lr: 2.0e-5
+    init_basis_from: global_qlora
+    seeds: [1701]
+    time_budget_minutes: 240
+  rap2p_no_history_retrained:
+    # true retrained ablation (history branch never observed at train time),
+    # used only to cross-check the modality-dropout "no-history" ablation
+    steps: [500, 800]
+    lr: 5.0e-4
+    lora_lr: 2.0e-5
+    init_basis_from: global_qlora
+    seeds: [1701]
+    time_budget_minutes: 240
+
+evaluation:
+  batch_size: 16
+  bootstrap_resamples: 2000
+  holm_alpha: 0.05
+  permutation:
+    n_permutations: 5
+    respondent_sample: 500
+  api:
+    respondent_sample: 500
+    k_values: [0, 3, 5]
+
+logging:
+  level: INFO

@@ -225,7 +225,12 @@ def run_training_job(
     train_iterator = PanelBatchIterator(store, train_spec, seed)
     validation_iterator = PanelBatchIterator(store, validation_spec, seed + 1)
 
-    modality_dropout = ModalityDropout(**data_cfg["modality_dropout"]) if run_name == "rap2p" else None
+    _md_enabled = bool(data_cfg.get("enable_modality_dropout", True))
+    modality_dropout = (
+        ModalityDropout(**data_cfg["modality_dropout"])
+        if (run_name == "rap2p" and _md_enabled)
+        else None
+    )
     steps_range = run_cfg["steps"]
     steps = int(max_optimizer_steps or (steps_range[1] if not smoke else 20))
 

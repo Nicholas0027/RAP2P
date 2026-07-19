@@ -14,3 +14,7 @@ secrets/
 *.key
 *.pem
 .git-credentials
+
+# wide-run large checkpoints (history.json is force-added; .pt too large for git)
+artifacts_wide/**/*.pt
+artifacts_wide/predictions/

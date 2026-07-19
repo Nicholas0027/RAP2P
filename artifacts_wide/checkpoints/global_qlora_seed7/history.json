@@ -31,12 +31,12 @@
   },
   {
     "step": 800,
-    "elapsed_minutes": 179.93271020515047,
+    "elapsed_minutes": 45.559345021215265,
     "lr": 0.0,
     "router_collapse_engaged": false,
-    "choice": 0.9791455539036542,
-    "ordinal": 0.2684373904648237,
+    "choice": 0.966230648625642,
+    "ordinal": 0.26601282018236816,
     "balance": 0.0,
-    "validation_nll": 1.8716430336236953
+    "validation_nll": 1.9118345856666565
   }
 ]
