@@ -1,0 +1,42 @@
+[
+  {
+    "step": 200,
+    "elapsed_minutes": 44.80562249839616,
+    "lr": 0.00017567128158176953,
+    "router_collapse_engaged": false,
+    "choice": 1.4261400309205055,
+    "ordinal": 0.37239364978857337,
+    "balance": 0.0,
+    "validation_nll": 1.5320360243320466
+  },
+  {
+    "step": 400,
+    "elapsed_minutes": 90.08074713149884,
+    "lr": 0.00010485622221144484,
+    "router_collapse_engaged": false,
+    "choice": 1.3109803088009357,
+    "ordinal": 0.3515366389602423,
+    "balance": 0.0,
+    "validation_nll": 1.5480184853076935
+  },
+  {
+    "step": 600,
+    "elapsed_minutes": 135.03960872781462,
+    "lr": 3.102762227218957e-05,
+    "router_collapse_engaged": false,
+    "choice": 1.150096771735698,
+    "ordinal": 0.3148389923060313,
+    "balance": 0.0,
+    "validation_nll": 1.7975360304117203
+  },
+  {
+    "step": 800,
+    "elapsed_minutes": 179.93271020515047,
+    "lr": 0.0,
+    "router_collapse_engaged": false,
+    "choice": 0.9791455539036542,
+    "ordinal": 0.2684373904648237,
+    "balance": 0.0,
+    "validation_nll": 1.8716430336236953
+  }
+]
