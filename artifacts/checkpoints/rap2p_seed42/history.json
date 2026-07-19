@@ -1,0 +1,62 @@
+[
+  {
+    "step": 200,
+    "elapsed_minutes": 21.35680492234727,
+    "lr": 0.00047590709015212635,
+    "router_collapse_engaged": false,
+    "choice": 1.5495759750530125,
+    "ordinal": 0.3955426868703216,
+    "balance": 0.0,
+    "validation_nll": 1.5669026732444764
+  },
+  {
+    "step": 400,
+    "elapsed_minutes": 42.66334858764894,
+    "lr": 0.0003887522700533675,
+    "router_collapse_engaged": false,
+    "choice": 1.5295935754850507,
+    "ordinal": 0.39497089584358036,
+    "balance": 0.0,
+    "validation_nll": 1.5534087061882018
+  },
+  {
+    "step": 600,
+    "elapsed_minutes": 63.96996408819687,
+    "lr": 0.0002621405555286121,
+    "router_collapse_engaged": false,
+    "choice": 1.5212448443844915,
+    "ordinal": 0.39285796366631986,
+    "balance": 0.0,
+    "validation_nll": 1.5359697699546815
+  },
+  {
+    "step": 800,
+    "elapsed_minutes": 85.29943988411688,
+    "lr": 0.00013207643898130854,
+    "router_collapse_engaged": false,
+    "choice": 1.510971043370664,
+    "ordinal": 0.3912866322789341,
+    "balance": 0.0,
+    "validation_nll": 1.5186484694480895
+  },
+  {
+    "step": 1000,
+    "elapsed_minutes": 106.6173604243823,
+    "lr": 3.5546170173306444e-05,
+    "router_collapse_engaged": false,
+    "choice": 1.5070103338733316,
+    "ordinal": 0.39106676922179756,
+    "balance": 0.0,
+    "validation_nll": 1.5264822959899902
+  },
+  {
+    "step": 1200,
+    "elapsed_minutes": 127.90979224299856,
+    "lr": 0.0,
+    "router_collapse_engaged": false,
+    "choice": 1.5050333662331103,
+    "ordinal": 0.39028872998431324,
+    "balance": 0.0,
+    "validation_nll": 1.5277938187122344
+  }
+]
